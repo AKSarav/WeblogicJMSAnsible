@@ -1,0 +1,23 @@
+---
+
+# Paths
+oracle_home: "/opt/oracle"
+wlshome: "/opt/oracle/wlserver"
+domainroot: "/opt/oracle/domains"
+domain_name: "mwidomain"
+
+# User ID of weblogic process 
+userid: weblogic
+
+# vars file for setup-jms
+admin_user: weblogic
+admin_pass: weblogic1
+admin_listen_port: 8001
+admin_server_url: t3://localhost:8001
+jmsservername: jmsserver-ms2
+jmsmodulename: jmsmodule2
+queuename: queue2
+queuejndiname: jndi/queue2
+jmsservertarget: ms2
+sdname: queue2sd
+sdtarget: jmsserver-ms2

@@ -1,0 +1,41 @@
+admin_user = "{{admin_user}}"
+admin_pass = "{{admin_pass}}"
+admin_server_url = "{{admin_server_url}}"
+jmsservername = "{{jmsservername}}"
+jmsmodulename = "{{jmsmodulename}}"
+queuename = "{{queuename}}"
+queuejndiname = "{{queuejndiname}}"
+jmsservertarget = "{{jmsservertarget}}"
+sdtarget = "{{sdtarget}}"
+sdname = "{{sdname}}"
+
+
+connect(admin_user,admin_pass,admin_server_url)
+edit()
+startEdit()
+
+cd('/')
+cmo.createJMSServer(jmsservername)
+
+cd('/JMSServers/'+jmsservername)
+set('Targets',jarray.array([ObjectName('com.bea:Name='+jmsservertarget+',Type=Server')], ObjectName))
+
+cd('/')
+cmo.createJMSSystemResource(jmsmodulename)
+
+cd('/JMSSystemResources/'+jmsmodulename)
+set('Targets',jarray.array([ObjectName('com.bea:Name='+jmsservertarget+',Type=Server')], ObjectName))
+cmo.createSubDeployment(sdname)
+
+cd('/JMSSystemResources/'+jmsmodulename+'/JMSResource/'+jmsmodulename)
+cmo.createQueue(queuename)
+
+cd('/JMSSystemResources/'+jmsmodulename+'/JMSResource/'+jmsmodulename+'/Queues/'+queuename)
+cmo.setJNDIName(queuejndiname)
+cmo.setSubDeploymentName(queuename)
+
+cd('/JMSSystemResources/'+jmsmodulename+'/SubDeployments/'+sdname)
+set('Targets',jarray.array([ObjectName('com.bea:Name='+jmsservername+',Type=JMSServer')], ObjectName))
+
+save()
+activate()

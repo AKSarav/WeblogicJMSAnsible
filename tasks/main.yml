@@ -1,0 +1,30 @@
+---
+# tasks file for setup-jms
+- name: Copy the file with template feature
+  tags: templatecopy 
+  become: yes
+  become_user: "{{ userid }}"
+  template:
+     src: "{{ item.src }}"
+     dest: "{{ oracle_home }}/{{ item.dest }}"
+     mode: 0755
+  with_items:
+    - { src: 'createjms.j2', dest: 'createjms.py' }
+
+- name: Create JMS resources
+  tags: jmscreate
+  become: yes
+  become_user: "{{ userid }}"
+  shell:  "source {{oracle_home}}/domains/{{domain_name}}/bin/setDomainEnv.sh && java weblogic.WLST {{ oracle_home }}/createjms.py"
+  register: jmscreate
+  args:
+    chdir: "{{ oracle_home }}"
+  # when: "{{ inventory_hostname == groups['launched'][0] }}"
+  environment:
+          USER_MEM_ARGS: "-Djava.security.egd=file:/tmp/big.random.file" 
+          CONFIG_JVM_ARGS: "-Djava.security.egd=file:/tmp/big.random.file"
+  
+  
+
+  
+  
